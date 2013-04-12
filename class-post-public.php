@@ -576,6 +576,9 @@ class Babble_Post_Public extends Babble_Plugin {
 		if ( $this->is_media_upload_tab( 'gallery' ) ) {
 			return;
 		}
+		if ( $this->is_media_manager() ) {
+			return;
+		}
 		
 		$query->query_vars = $this->translate_query_vars( $query->query_vars );
 	}
@@ -1818,6 +1821,23 @@ class Babble_Post_Public extends Babble_Plugin {
 			return true;
 		}
 		if ( isset( $_GET[ 'tab' ] ) || $tab == $_GET[ 'tab' ] ) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Are we viewing the (3.5+) media manager?
+	 *
+	 * @return boolean True if we are viewing the media manager
+	 **/
+	protected function is_media_manager() {
+		if ( ! is_admin() )
+			return false;
+		if ( !isset( $_POST['action'] ) ) {
+			return false;
+		}
+		if ( 'query-attachments' == $_POST['action'] ) {
 			return true;
 		}
 		return false;
